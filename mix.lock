@@ -1,0 +1,2 @@
+%{"randomex": {:git, "https://github.com/timCF/randomex.git", "e8602cc716f68404e65b07f26446ba924d9e7174", []},
+  "sfmt": {:git, "https://github.com/jj1bdx/sfmt-erlang.git", "67b97620fb133562be6ac07035f2ba2864cac6d6", []}}
