@@ -1,2 +1,2 @@
-%{"randomex": {:git, "https://github.com/timCF/randomex.git", "e8602cc716f68404e65b07f26446ba924d9e7174", []},
-  "sfmt": {:git, "https://github.com/jj1bdx/sfmt-erlang.git", "67b97620fb133562be6ac07035f2ba2864cac6d6", []}}
+%{"randomex": {:git, "https://github.com/veryevilzed/randomex.git", "f015b08c06e9495102ac7d172bfad74f35297f4a", []},
+  "sfmt": {:git, "https://github.com/jj1bdx/sfmt-erlang.git", "f9fbc7a507df28433c6bf9d5ee890d189528d6be", []}}

@@ -32,7 +32,7 @@ defmodule Excards.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-		{:randomex, github: "timCF/randomex"}
+		{:randomex, github: "veryevilzed/randomex"}
 	]
   end
 end
