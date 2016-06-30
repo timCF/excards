@@ -9,13 +9,17 @@ defmodule Excards.Games.Poker.Holdem do
 	defstruct	deck: nil,
 				period: nil,
 				cards_players: nil,
-				cards_commons: nil
+				cards_commons: nil,
+				players_bestcombo: %{},
+				players_win_tie: %{},
+				sumrounds: 0
+
 
 	#########################
 	### compile-time data ###
 	#########################
 
-	@new_deck Excards.Deck.new(36)
+	@new_deck Excards.Deck.new(52)
 
 	##############
 	### public ###
@@ -23,7 +27,7 @@ defmodule Excards.Games.Poker.Holdem do
 
 	@spec new( 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 ) :: Excards.Games.Poker.Holdem.t
 	def new(pn) when is_integer(pn) and (pn > 0) and (pn < 9) do
-		Enum.reduce(0..pn, %Excards.Games.Poker.Holdem{period: :Preflop, deck: Excards.Deck.shuffle(@new_deck), cards_players: [], cards_commons: []},
+		Enum.reduce(1..pn, %Excards.Games.Poker.Holdem{period: :Preflop, deck: Excards.Deck.shuffle(@new_deck), cards_players: [], cards_commons: []},
 			fn(_, state = %Excards.Games.Poker.Holdem{deck: this_deck, cards_players: cp}) ->
 				{new_cards, new_deck} = Excards.Deck.take(this_deck, 2)
 				%Excards.Games.Poker.Holdem{state | deck: new_deck, cards_players: [new_cards|cp]}
@@ -40,6 +44,21 @@ defmodule Excards.Games.Poker.Holdem do
 		%Excards.Games.Poker.Holdem{state | period: (case period do ; :Flop -> :Turn ; :Turn -> :River ; end),
 											cards_commons: (cards_commons ++ new_cards),
 											deck: new_deck}
+	end
+
+	def eval(state = %Excards.Games.Poker.Holdem{deck: deck}), do: eval_proc(state, (Stream.with_index(deck) |> Enum.reduce(%{}, fn({c,i},acc) -> Map.put(acc, i, c) end)))
+
+	defp eval_proc(state = %Excards.Games.Poker.Holdem{cards_commons: [_,_,_,_,_], sumrounds: sumrounds}, %{}) do
+		#
+		# TODO
+		#
+		%Excards.Games.Poker.Holdem{state | sumrounds: sumrounds + 1}
+	end
+	defp eval_proc(state = %Excards.Games.Poker.Holdem{cards_commons: cards_commons}, deckmap = %{}) do
+		Enum.reduce(deckmap, state, fn({n, _}, acc = %Excards.Games.Poker.Holdem{}) ->
+			%Excards.Games.Poker.Holdem{acc | cards_commons: [Map.get(deckmap, n)|cards_commons]}
+			|> eval_proc(Map.delete(deckmap, n))
+		end)
 	end
 
 end
